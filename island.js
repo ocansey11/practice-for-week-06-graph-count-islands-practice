@@ -1,5 +1,5 @@
 function getNeighbors(row, col, matrix) {
-  let neighbors = [ ]
+  let neighbors = []
 
 
   // Check top
@@ -57,23 +57,60 @@ function getNeighbors(row, col, matrix) {
 function countIslands(matrix) {
 
   // Create a visited set to store visited nodes
-  // Initialize count to 0
-  // Iterate through all indices in matrix
-    // If an index contains a 1 and has not been visited,
-    // increment island count and start traversing neighbors
-      // DO THE THING (increment island count by 1)
-      // Initialize a stack with current index
-      // Add stringified version of current index to the visited set
-      // While stack contains elements
-        // Pop element from stack
-        // Get valid neighbors of current element
-        // Iterate over neigbors
-          // If neighbor has not been visited
-            // Add neighbor to stack
-            // Mark neighbor as visited
-  // Return island count
+  let visited = new Set()
 
-  // Your code here
+  // Initialize count to 0
+  let count = 0
+
+  // Iterate through all indices in matrix
+  for(let r = 0; r < matrix.length; r++){
+    for(c = 0; c < matrix[r].length; c++){
+      let index = [r,c]
+      let stringified = index.toString()
+
+      // If an index contains a 1 and has not been visited,
+      // increment island count and start traversing neighbors
+      if(!visited.has(stringified) && matrix[r][c] === 1){
+
+        // DO THE THING (increment island count by 1)
+        count++;
+
+        // Initialize a stack with current index
+        let stack = [index]
+
+        // Add stringified version of current index to the visited set
+        visited.add(stringified)
+
+        // While stack contains elements
+        while(stack.length > 0){
+          // Pop element from stack
+          let currentNode = stack.pop()
+          let row = currentNode[0]
+          let col = currentNode[1]
+
+          // Get valid neighbors of current element
+          let neighbors = getNeighbors(row, col, matrix)
+          // Iterate over neigbors
+          for(let i = 0; i < neighbors.length; i++){
+            let value = neighbors[i]
+            stringified = value.toString()
+
+            // If neighbor has not been visited
+            if(!visited.has(stringified)){
+
+              // Add neighbor to stack
+              stack.push(value)
+
+              // Mark neighbor as visited
+              visited.add(stringified)
+            }
+          }
+        }
+      }
+    }
+  }
+  // Return island count
+  return count
 }
 
 // Uncomment the lines below for local testing
